@@ -1,20 +1,29 @@
 #!/bin/bash
 
+# Setup compiler stuff
+export USE_CCACHE=1
+/usr/bin/ccache -M 50G
+out/host/linux-x86/bin/jack-admin kill-server
+export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4000m"
+out/host/linux-x86/bin/jack-admin start-server
+
 # Colorize and add text parameters
 red=$(tput setaf 1)             #  red
 grn=$(tput setaf 2)             #  green
-blu=$(tput setaf 4)             #  blue
-txtbld=$(tput bold)             #  bold
-bldgrn=${txtbld}$(tput setaf 1) #  bold red
-bldgrn=${txtbld}$(tput setaf 2) #  bold green
-bldblu=${txtbld}$(tput setaf 4) #  bold blue
-txtrst=$(tput sgr0)             #  reset
+cya=$(tput setaf 6)             #  cyan
+txtbld=$(tput bold)             # Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldgrn=${txtbld}$(tput setaf 2) #  green
+bldblu=${txtbld}$(tput setaf 4) #  blue
+bldcya=${txtbld}$(tput setaf 6) #  cyan
+txtrst=$(tput sgr0)             # Reset
 
 DEVICE="$1"
 SYNC="$2"
 CLEAN="$3"
 LOG="$4"
-SHUTDOWN="$5"
+GDRIVE="$5"
+SHUTDOWN="$6"
 
 ROOT_PATH=$PWD
 BUILD_PATH="$ROOT_PATH/out/target/product/$DEVICE"
@@ -38,10 +47,6 @@ fi
 # Setup environment
 echo -e "${bldblu}Setting up build environment ${txtrst}"
 . build/envsetup.sh
-
-# Setup ccache
-export USE_CCACHE=1
-/usr/bin/ccache -M 50G
 
 # Set the device
 echo -e "Setting the device... ${txtrst}"
@@ -89,8 +94,13 @@ then
     fi
 
     cp $BUILD_PATH/ABCrom_*.zip $ROOT_PATH
-
-    # If the build failed
+    # Google Drive upload
+    if [ "$GDRIVE" == "gdrive" ]
+    then
+    echo -e "${bldblu}Uploading build to Google Drive ${txtrst}"
+    gdrive upload ABCrom_*.zip
+    fi
+# If the build failed
 else
    BUILD_RESULT="Build failed"
 fi
@@ -117,5 +127,5 @@ pkill java
 # Shutdown the system if required by the user
 if [ "$SHUTDOWN" == "off" ]
 then
-  qdbus org.kde.ksmserver /KSMServer logout 0 2 2
+  poweroff
 fi

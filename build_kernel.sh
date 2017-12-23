@@ -1,14 +1,23 @@
 #!/bin/bash
 
+# Setup compiler stuff
+export USE_CCACHE=1
+/usr/bin/ccache -M 50G
+
 # Colorize and add text parameters
+red=$(tput setaf 1)             #  red
 grn=$(tput setaf 2)             #  green
+cya=$(tput setaf 6)             #  cyan
 txtbld=$(tput bold)             # Bold
+bldred=${txtbld}$(tput setaf 1) #  red
 bldgrn=${txtbld}$(tput setaf 2) #  green
 bldblu=${txtbld}$(tput setaf 4) #  blue
+bldcya=${txtbld}$(tput setaf 6) #  cyan
 txtrst=$(tput sgr0)             # Reset
 
 DEVICE="$1"
 LOG="$2"
+GDRIVE="$3"
 
 # Time of build startup
 res1=$(date +%s.%N)
@@ -16,10 +25,6 @@ res1=$(date +%s.%N)
 # Setup environment
 echo -e "${bldblu}Setting up build environment ${txtrst}"
 . build/envsetup.sh
-
-# Setup ccache
-export USE_CCACHE=1
-/usr/bin/ccache -M 50G
 
 # Set the device
 echo -e "Setting the device... ${txtrst}"
@@ -33,6 +38,13 @@ then
 else
    echo -e "${bldblu}Starting build kernel for $DEVICE without saving a build log file ${txtrst}"
    mka bootimage;
+fi
+
+# Google Drive upload
+if [ "$GDRIVE" == "gdrive" ]
+then
+   echo -e "${bldblu}Uploading bootimage to Google Drive ${txtrst}"
+   gdrive upload $BUILD_PATH/boot.img;
 fi
 
 # Get elapsed time
