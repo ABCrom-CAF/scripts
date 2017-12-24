@@ -19,6 +19,9 @@ DEVICE="$1"
 LOG="$2"
 GDRIVE="$3"
 
+ROOT_PATH=$PWD
+BUILD_PATH="$ROOT_PATH/out/target/product/$DEVICE"
+
 # Time of build startup
 res1=$(date +%s.%N)
 
