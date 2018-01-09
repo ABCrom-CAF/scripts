@@ -73,33 +73,33 @@ else
 fi
 
 # If the above was successful
-if [ `ls $BUILD_PATH/ABCrom_*.zip 2>/dev/null | wc -l` != "0" ]
+if [ `ls $BUILD_PATH/ABC_ROM_*.zip 2>/dev/null | wc -l` != "0" ]
 then
    BUILD_RESULT="Build successful"
 
     # Copy the device ROM.zip to root (and before doing this, remove old device builds but not the last one of them, adding an OLD_tag to it)
     echo -e "${bldblu}Copying ROM.zip and Changelog to $ROOT_PATH ${txtrst}"
 
-    if [ `ls $ROOT_PATH/OLD_ABCrom_$DEVICE-*.zip 2>/dev/null | wc -l` != "0" ]
+    if [ `ls $ROOT_PATH/OLD_ABC_ROM_$DEVICE-*.zip 2>/dev/null | wc -l` != "0" ]
     then
-    rm OLD_ABCrom_$DEVICE-*.zip
+    rm OLD_ABC_ROM_$DEVICE-*.zip
     fi
 
-    if [ `ls $ROOT_PATH/ABCrom_$DEVICE-*.zip 2>/dev/null | wc -l` != "0" ]
+    if [ `ls $ROOT_PATH/ABC_ROM_$DEVICE-*.zip 2>/dev/null | wc -l` != "0" ]
     then
-    for file in ABCrom_$DEVICE-*.zip
+    for file in ABC_ROM_$DEVICE-*.zip
     do
-        mv -f "${file}" "${file/ABCrom/OLD_ABCrom}"
+        mv -f "${file}" "${file/ABC_ROM/OLD_ABC_ROM}"
     done
     fi
 
-    cp $BUILD_PATH/ABCrom_*.zip $ROOT_PATH
+    cp $BUILD_PATH/ABC_ROM_*.zip $ROOT_PATH
     cp $BUILD_PATH/$DEVICE-Changelog.txt $ROOT_PATH
     # Google Drive upload
     if [ "$GDRIVE" == "gdrive" ]
     then
     echo -e "${bldblu}Uploading build to Google Drive ${txtrst}"
-    gdrive upload ABCrom_*.zip
+    gdrive upload ABC_ROM_*.zip
 	gdrive upload $DEVICE-Changelog.txt
     fi
 # If the build failed
