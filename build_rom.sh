@@ -129,5 +129,5 @@ pkill java
 # Shutdown the system if required by the user
 if [ "$SHUTDOWN" == "off" ]
 then
-  poweroff
+  sudo poweroff
 fi
