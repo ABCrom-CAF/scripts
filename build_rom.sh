@@ -4,7 +4,7 @@
 export USE_CCACHE=1
 /usr/bin/ccache -M 50G
 out/host/linux-x86/bin/jack-admin kill-server
-export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4000m"
+export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx3072m -XX:+UseSerialGC -Xmn256m -XX:SurvivorRatio=6 -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40"
 out/host/linux-x86/bin/jack-admin start-server
 
 # Colorize and add text parameters
