@@ -35,7 +35,7 @@ res1=$(date +%s.%N)
 if [ "$SYNC" == "sync" ]
 then
    echo -e "${bldblu}Syncing latest sources ${txtrst}"
-   repo sync
+   repo sync -c -f --force-sync --no-clone-bundle --no-tags
 fi
 
 # Setup environment
